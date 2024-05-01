@@ -4,3 +4,6 @@
 [submodule "products_msvc"]
 	path = products_msvc
 	url = https://github.com/asuridev/mok-products-msvc.git
+[submodule "orders_msvc"]
+	path = orders_msvc
+	url = https://github.com/asuridev/mok-orders-msvc.git
