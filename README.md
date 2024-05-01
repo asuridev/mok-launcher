@@ -40,7 +40,7 @@ git submodule update --init --recursive
 ```
 docker compose up --build
 ```
- Esto debe construir las las imagenes de docker y correr en un contenedor de docker-compose con el API-Gateway, los dos microservicio, las dos bases de datos postgresql.
+ Esto debe construir las las imagenes de docker y correr en un contenedor de docker-compose con el API-Gateway, el servidor de NATS, los dos microservicio, las dos bases de datos postgresql.
  #### IMPORTANTE
  El comando **git submodule update --init --recursive** realiza la clonación de los repositorios de los proyectos en el repositorio launcher que solo posee la referencia de estos.
 
