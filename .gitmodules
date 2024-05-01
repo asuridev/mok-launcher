@@ -1,3 +1,6 @@
 [submodule "api_gateway"]
 	path = api_gateway
 	url = https://github.com/asuridev/mok-api-gateway.git
+[submodule "products_msvc"]
+	path = products_msvc
+	url = https://github.com/asuridev/mok-products-msvc.git
