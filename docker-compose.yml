@@ -1,0 +1,75 @@
+version: '3.9'
+
+services:
+
+  nats-server:
+    image: nats:latest
+    ports:
+      - "8222:8222"
+  
+ # Product DB
+  product-db:
+    image: postgres:alpine3.18
+    container_name: products_database
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: database
+
+  # Order DB
+  order-db:
+    image: postgres:alpine3.18
+    container_name: orders_database
+    ports:
+      - "5436:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: database  
+
+  # API Gateway
+  api-gateway:
+    build: ./api_gateway
+    ports:
+      - 3000:3000
+    command: java -jar ./api_gateway-0.0.1-SNAPSHOT.jar
+    environment:
+      - PROFILE=pdn
+      - SERVER_PORT=3000
+      - NATS_SERVER=nats://nats-server:4222
+
+  # Product microservices
+  product-msvc:
+    build: ./products_msvc
+    command: java -jar ./products_msvc-0.0.1-SNAPSHOT.jar
+    environment:
+      - PROFILE=pdn
+      - SERVER_PORT=3000
+      - NATS_SERVER=nats://nats-server:4222
+      - DB_HOST=product-db
+      - DB_PORT=5432
+      - DB_NAME=database
+      - DB_USER=user
+      - DB_PASSWORD=secret
+    depends_on:
+      - product-db
+    restart: always
+
+  # order microservices
+  order-msvc:
+    build: ./orders_msvc
+    command: java -jar ./orders_msvc-0.0.1-SNAPSHOT.jar
+    environment:
+      - PROFILE=pdn
+      - SERVER_PORT=3000
+      - NATS_SERVER=nats://nats-server:4222
+      - DB_HOST=order-db
+      - DB_PORT=5432
+      - DB_NAME=database
+      - DB_USER=user
+      - DB_PASSWORD=secret
+    depends_on:
+      - order-db
+    restart: always
